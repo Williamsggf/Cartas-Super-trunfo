@@ -42,12 +42,12 @@ int main() {
     // Exiba os valores inseridos para cada atributo da cidade, um por linha.
 
     printf("\n");
-    printf("O c�digo da cidade informado foi: %d", codigo);
-    printf("O nome da cidadte prenchido foi: %s", nome);
-    printf("A popula��o da cidade informada foi: %d", populacao);
-    printf("A �rea da cidade informada foi: %.2f", area);
-    printf("O PIB da cidade informada foi: %.2f", pib);
-    printf("O n�mero de pontos tur�sticos da cidade informada foi: %d", pt_turisticos);
+    printf("O c�digo da cidade informado foi: %d \n", codigo);
+    printf("O nome da cidadte prenchido foi: %s \n", nome);
+    printf("A popula��o da cidade informada foi: %d \n", populacao);
+    printf("A �rea da cidade informada foi: %.2f \n", area);
+    printf("O PIB da cidade informada foi: %.2f \n", pib);
+    printf("O n�mero de pontos tur�sticos da cidade informada foi: %d \n", pt_turisticos);
 
 
 
