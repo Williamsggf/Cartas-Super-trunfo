@@ -16,84 +16,212 @@ typedef struct {
     float super_poder;
 } Carta;
 
-void cadastrarCartas(Carta cartas[]) {
-    char estados[NUM_ESTADOS] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-    int index = 0;
+Carta cartas[TOTAL_CARTAS] = {
+    {"A01", 500000, 300.5, 15.2, 10},
+    {"A02", 1200000, 450.2, 25.8, 15},
+    {"B01", 800000, 350.0, 18.5, 12},
+    {"B02", 950000, 400.3, 22.1, 14},
+    {"C01", 600000, 280.7, 14.0, 9},
+    {"C02", 1100000, 500.1, 30.0, 20},
+    {"D01", 700000, 320.4, 17.3, 11},
+    {"D02", 1050000, 470.6, 27.5, 18}
+};
 
-    printf("Cadastro de cartas do Super Trunfo - PaÌses\n");
-    for (int i = 0; i < NUM_ESTADOS; i++) {
-        for (int j = 1; j <= CIDADES_POR_ESTADO; j++) {
-            snprintf(cartas[index].codigo, sizeof(cartas[index].codigo), "%c%02d", estados[i], j);
-
-            printf("\nCadastro da cidade: %s\n", cartas[index].codigo);
-
-            printf("Digite a populaÁ„o: ");
-            scanf("%d", &cartas[index].populacao);
-
-            printf("Digite a ·rea (em km≤): ");
-            scanf("%f", &cartas[index].area);
-
-            printf("Digite o PIB (em bilhıes de USD): ");
-            scanf("%f", &cartas[index].pib);
-
-            printf("Digite o n˙mero de pontos turÌsticos: ");
-            scanf("%d", &cartas[index].pontos_turisticos);
-
-            // C·lculo da densidade populacional e PIB per capita
-            cartas[index].densidade_populacional = (cartas[index].area > 0) ? (cartas[index].populacao / cartas[index].area) : 0.0;
-            cartas[index].pib_per_capita = (cartas[index].populacao > 0) ? (cartas[index].pib / cartas[index].populacao) : 0.0;
-
-            // C·lculo do Super Poder (soma de todas as propriedades)
-            cartas[index].super_poder = cartas[index].populacao + cartas[index].area + cartas[index].pib + cartas[index].pontos_turisticos;
-
-            index++;
-        }
-    }
+void calcularPropriedades(Carta *carta) {
+    carta->densidade_populacional = (carta->area > 0) ? (carta->populacao / carta->area) : 0.0;
+    carta->pib_per_capita = (carta->populacao > 0) ? (carta->pib / carta->populacao) : 0.0;
+    carta->super_poder = carta->populacao + carta->area + carta->pib + carta->pontos_turisticos;
 }
 
-void exibirCartas(Carta cartas[], int totalCartas) {
+void exibirCartas() {
     printf("\nCartas cadastradas:\n");
-    for (int i = 0; i < totalCartas; i++) {
-        printf("\nCidade: %s\n", cartas[i].codigo);
-        printf("PopulaÁ„o: %d\n", cartas[i].populacao);
-        printf("Densidade populacional: %.2f hab/km≤\n", cartas[i].densidade_populacional);
-        printf("¡rea: %.2f km≤\n", cartas[i].area);
-        printf("PIB: %.2f bilhıes de USD\n", cartas[i].pib);
-        printf("PIB per capita: %.2f USD\n", cartas[i].pib_per_capita * 1e6); // PIB per capita em milhıes
-        printf("Pontos turÌsticos: %d\n", cartas[i].pontos_turisticos);
+    for (int i = 0; i < TOTAL_CARTAS; i++) {
+        calcularPropriedades(&cartas[i]);
+        printf("\n[%d] Cidade: %s\n", i, cartas[i].codigo);
+        printf("Popula√ß√£o: %d\n", cartas[i].populacao);
+        printf("Densidade populacional: %.2f hab/km¬≤\n", cartas[i].densidade_populacional);
+        printf("√Årea: %.2f km¬≤\n", cartas[i].area);
+        printf("PIB: %.2f bilh√µes USD\n", cartas[i].pib);
+        printf("PIB per capita: %.2f USD\n", cartas[i].pib_per_capita * 1e6);
+        printf("Pontos tur√≠sticos: %d\n", cartas[i].pontos_turisticos);
         printf("Super Poder: %.2f\n", cartas[i].super_poder);
     }
 }
 
-void compararCartas(Carta c1, Carta c2) {
-    printf("\nComparaÁ„o entre %s e %s:\n", c1.codigo, c2.codigo);
+void alterarCarta() {
+    int idx;
+    printf("\nDigite o √≠ndice da carta (0 a %d): ", TOTAL_CARTAS - 1);
+    scanf("%d", &idx);
+    if (idx < 0 || idx >= TOTAL_CARTAS) {
+        printf("√çndice inv√°lido!\n");
+        return;
+    }
 
-    printf("PopulaÁ„o: %s vence\n", (c1.populacao > c2.populacao) ? c1.codigo : c2.codigo);
-    printf("Densidade populacional: %s vence\n", (c1.densidade_populacional < c2.densidade_populacional) ? c1.codigo : c2.codigo);
-    printf("¡rea: %s vence\n", (c1.area > c2.area) ? c1.codigo : c2.codigo);
-    printf("PIB: %s vence\n", (c1.pib > c2.pib) ? c1.codigo : c2.codigo);
-    printf("PIB per capita: %s vence\n", (c1.pib_per_capita > c2.pib_per_capita) ? c1.codigo : c2.codigo);
-    printf("Pontos turÌsticos: %s vence\n", (c1.pontos_turisticos > c2.pontos_turisticos) ? c1.codigo : c2.codigo);
-    printf("Super Poder: %s vence\n", (c1.super_poder > c2.super_poder) ? c1.codigo : c2.codigo);
+    printf("\nAlterando cidade %s\n", cartas[idx].codigo);
+    printf("Nova popula√ß√£o: ");
+    scanf("%d", &cartas[idx].populacao);
+    printf("Nova √°rea (km¬≤): ");
+    scanf("%f", &cartas[idx].area);
+    printf("Novo PIB (bilh√µes USD): ");
+    scanf("%f", &cartas[idx].pib);
+    printf("Novos pontos tur√≠sticos: ");
+    scanf("%d", &cartas[idx].pontos_turisticos);
+
+    calcularPropriedades(&cartas[idx]);
+    printf("Carta atualizada com sucesso!\n");
+}
+
+void compararCartas() {
+    int idx1, idx2;
+    printf("\nDigite os √≠ndices das cartas para comparar (0 a %d): ", TOTAL_CARTAS - 1);
+    scanf("%d %d", &idx1, &idx2);
+
+    if (idx1 < 0 || idx1 >= TOTAL_CARTAS || idx2 < 0 || idx2 >= TOTAL_CARTAS) {
+        printf("√çndices inv√°lidos!\n");
+        return;
+    }
+
+    calcularPropriedades(&cartas[idx1]);
+    calcularPropriedades(&cartas[idx2]);
+
+    printf("\n *** Escolha a propriedade que deseja comparar: *** \n");
+    printf("1. Popula√ß√£o (Maior vence)\n");
+    printf("2. Densidade populacional (Menor vence)\n");
+    printf("3. √Årea (Maior vence)\n");
+    printf("4. PIB (Maior vence)\n");
+    printf("5. PIB per capita (Maior vence)\n");
+    printf("6. Pontos tur√≠sticos (Maior vence)\n");
+    printf("7. Super Poder (Maior vence)\n");
+    printf("Escolha uma op√ß√£o: ");
+    int opcao;
+    scanf("%d", &opcao);
+
+    char *vencedor = NULL;
+
+    switch (opcao) {
+        case 1:
+            vencedor = (cartas[idx1].populacao > cartas[idx2].populacao) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 2:
+            vencedor = (cartas[idx1].densidade_populacional < cartas[idx2].densidade_populacional) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 3:
+            vencedor = (cartas[idx1].area > cartas[idx2].area) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 4:
+            vencedor = (cartas[idx1].pib > cartas[idx2].pib) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 5:
+            vencedor = (cartas[idx1].pib_per_capita > cartas[idx2].pib_per_capita) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 6:
+            vencedor = (cartas[idx1].pontos_turisticos > cartas[idx2].pontos_turisticos) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        case 7:
+            vencedor = (cartas[idx1].super_poder > cartas[idx2].super_poder) ? cartas[idx1].codigo : cartas[idx2].codigo;
+            break;
+        default:
+            printf("Op√ß√£o inv√°lida!\n");
+            return;
+    }
+
+    printf("Cidade vencedora: %s\n", vencedor);
+}
+
+float obterValorAtributo(Carta carta, int atributo) {
+    switch (atributo) {
+        case 1: return carta.populacao;
+        case 2: return carta.densidade_populacional;
+        case 3: return carta.area;
+        case 4: return carta.pib;
+        case 5: return carta.pib_per_capita;
+        case 6: return carta.pontos_turisticos;
+        case 7: return carta.super_poder;
+        default: return 0;
+    }
+}
+
+void compararCartasAvancado() {
+    int idx1, idx2, atributo1, atributo2;
+
+    printf("\nDigite os √≠ndices das cartas para comparar (0 a %d): ", TOTAL_CARTAS - 1);
+    scanf("%d %d", &idx1, &idx2);
+
+    if (idx1 < 0 || idx1 >= TOTAL_CARTAS || idx2 < 0 || idx2 >= TOTAL_CARTAS) {
+        printf("√çndices inv√°lidos!\n");
+        return;
+    }
+
+    calcularPropriedades(&cartas[idx1]);
+    calcularPropriedades(&cartas[idx2]);
+
+    printf("\n*** Escolha o primeiro atributo para compara√ß√£o ***\n");
+    printf("1. Popula√ß√£o\n2. Densidade populacional\n3. √Årea\n4. PIB\n5. PIB per capita\n6. Pontos tur√≠sticos\n7. Super Poder\n");
+    scanf("%d", &atributo1);
+
+    do {
+        printf("\n*** Escolha o segundo atributo (diferente do primeiro) ***\n");
+        for (int i = 1; i <= 7; i++) {
+            if (i != atributo1) printf("%d. ", i);
+        }
+        scanf("%d", &atributo2);
+        if (atributo2 == atributo1 || atributo2 < 1 || atributo2 > 7)
+            printf("Atributo inv√°lido ou repetido. Escolha novamente.\n");
+    } while (atributo2 == atributo1 || atributo2 < 1 || atributo2 > 7);
+
+    float val1_c1 = obterValorAtributo(cartas[idx1], atributo1);
+    float val1_c2 = obterValorAtributo(cartas[idx2], atributo1);
+    float val2_c1 = obterValorAtributo(cartas[idx1], atributo2);
+    float val2_c2 = obterValorAtributo(cartas[idx2], atributo2);
+
+    float total_c1 = (atributo1 == 2 ? -val1_c1 : val1_c1) + (atributo2 == 2 ? -val2_c1 : val2_c1);
+    float total_c2 = (atributo1 == 2 ? -val1_c2 : val1_c2) + (atributo2 == 2 ? -val2_c2 : val2_c2);
+
+    printf("\nCompara√ß√£o entre %s e %s:\n", cartas[idx1].codigo, cartas[idx2].codigo);
+    printf("Soma ajustada dos atributos:\n%s: %.2f\n%s: %.2f\n", cartas[idx1].codigo, total_c1, cartas[idx2].codigo, total_c2);
+
+    if (total_c1 > total_c2)
+        printf("Vencedora: %s\n", cartas[idx1].codigo);
+    else if (total_c2 > total_c1)
+        printf("Vencedora: %s\n", cartas[idx2].codigo);
+    else
+        printf("Empate!\n");
+}
+
+void verRegras() {
+    printf("\nRegras do Jogo:\n");
+    printf("1. Cada carta representa uma cidade fict√≠cia.\n");
+    printf("2. Voc√™ pode editar e comparar as cartas.\n");
+    printf("3. A carta com melhores atributos vence.\n");
+}
+
+void iniciaJogo() {
+    int opcaoJogo;
+    do {
+        printf("\n--- Menu do Jogo ---\n");
+        printf("1. Exibir Cartas\n");
+        printf("2. Alterar Carta\n");
+        printf("3. Comparar Cartas (Simples)\n");
+        printf("4. Comparar Cartas (Avan√ßado)\n");
+        printf("5. Ver Regras\n");
+        printf("0. Sair\n");
+        printf("Escolha uma op√ß√£o: ");
+        scanf("%d", &opcaoJogo);
+
+        switch (opcaoJogo) {
+            case 1: exibirCartas(); break;
+            case 2: alterarCarta(); break;
+            case 3: compararCartas(); break;
+            case 4: compararCartasAvancado(); break;
+            case 5: verRegras(); break;
+            case 0: printf("Saindo do jogo...\n"); break;
+            default: printf("Op√ß√£o inv√°lida!\n"); break;
+        }
+    } while (opcaoJogo != 0);
 }
 
 int main() {
-    Carta cartas[TOTAL_CARTAS];
-
-    cadastrarCartas(cartas);
-    exibirCartas(cartas, TOTAL_CARTAS);
-
-    // ComparaÁ„o de cartas
-    int idx1, idx2;
-    printf("\nDigite os Ìndices das cartas para comparar (0 a %d): ", TOTAL_CARTAS - 1);
-    scanf("%d %d", &idx1, &idx2);
-
-    if (idx1 >= 0 && idx1 < TOTAL_CARTAS && idx2 >= 0 && idx2 < TOTAL_CARTAS) {
-        compararCartas(cartas[idx1], cartas[idx2]);
-    } else {
-        printf("Õndices inv·lidos!\n");
-    }
-
+    iniciaJogo();
     return 0;
 }
 
